@@ -20,6 +20,7 @@ while isRunning
     
     gameMap.drawMap(hero.x, hero.y);
     gameMap.printContext(hero.x, hero.y, boss.name);
+hero.printHUD()
     
     fprintf('\n\n');
     command = input('Give a Command: [w] Up | [s] Down | [a] Left | [d] Right | [q] Quit: ', 's');
@@ -34,6 +35,8 @@ while isRunning
             hero = hero.move(-1, 0);
         case 'd'
             hero = hero.move(1, 0);
+case 'i'
+hero.printInventory();
         case 'q'
             isRunning = false;
             disp('Closing the game...');
