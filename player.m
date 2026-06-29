@@ -35,7 +35,7 @@ classdef player < entity
                 obj.x = newX;
                 obj.y = newY;
             else
-                disp('Ouch! You hit the invisible wall at the edge of the world!');
+                fprintf(2,'Ouch! You hit the invisible wall at the edge of the world!');
             end
         end
 

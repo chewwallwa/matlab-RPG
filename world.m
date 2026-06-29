@@ -13,8 +13,8 @@ classdef world
             obj.matrixGrid(7,7) = 2; % cidade principal            
             
             obj.enemyList = {
-                monster('Slime', 3, 3);
-                monster('Goblin', 8, 2);
+                monster('Slime', 4, 6);
+                monster('Goblin', 8, 3);
                 monster('Lula', 9, 9)
             };
             
@@ -63,23 +63,26 @@ classdef world
             drawnow;
         end
         
-        function printContext(obj, heroX, heroY)
+        function encounterIdx = printContext(obj, heroX, heroY)
+            % returns the index of the encountered enemy in obj.enemyList
+            % or 0 when there's no encounter
+            encounterIdx = 0;
             terrainVal = obj.matrixGrid(heroY, heroX);
             
             if terrainVal == 2
-                fprintf(2,'\nWelcome to the Central Town. It is safe here.\n');
-                return; % Sai da função pra não imprimir mato
+                warning('\nWelcome to the Central Town. It is safe here.\n');
+                return; % no encounter in town
             end
 
             for i = 1:length(obj.enemyList)
                 enemy = obj.enemyList{i};
-                if heroX == enemy.x && heroY == enemy.y                
-                    fprintf(2,'\nALERT: You bumped into a %s (HP: %d)!\n', enemy.name, enemy.HP);
-                    fprintf('\nPos: (%d, %d)\n', heroX, heroY);
-                    return; 
+                if heroX == enemy.x && heroY == enemy.y
+                    fprintf(2, '\nALERT: You bumped into a %s (HP: %d)! Pos: (%d, %d)\n', enemy.name, enemy.HP, heroX, heroY);
+                    encounterIdx = i;
+                    return;
                 end
             end
-            
+
             fprintf('\nYou are exploring the wild. Pos: (%d, %d)\n', heroX, heroY);
         end
 
