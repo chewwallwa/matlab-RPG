@@ -3,6 +3,7 @@ classdef player < entity
         Inventory
         Money
         XP
+LVL
 
         HP % heath points
         AD % atack damage
@@ -27,6 +28,13 @@ classdef player < entity
                 disp('Ouch! You hit the invisible wall at the edge of the world!');
             end
         end
+end
+methods (static)
+function printHUD(obj)
+fprintf('LVL: %d(%d exp) | HP: %d | Money: %d', LVL, XP, HP, Money);
+function printInventory(obj)
+fprintf('inventoryprint');
+end
     end
 end
 
