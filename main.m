@@ -3,47 +3,39 @@
 % =========================================================================
 clear; clc; close all;
 
-% 1. INITIALIZATION
-hero = player("Hero", 7,9);
-boss = monster("Main boss", 10, 10);
-
+hero = player('thierry');
 gameMap = world();
 isRunning = true;
 
 % 2. GAME LOOP
 while isRunning
-    clc; % pra nao gerar log
-    
+    clc;
+
     disp("================================================");
     disp("                  MATLAB RPG                    ");
     disp("================================================");
     
+    hero.printHUD();
+    
     gameMap.drawMap(hero.x, hero.y);
-    gameMap.printContext(hero.x, hero.y, boss.name);
-hero.printHUD()
+    
+    % Nota: tiramos o boss.name daqui, o mundo gerencia isso agora
+    gameMap.printContext(hero.x, hero.y);
     
     fprintf('\n\n');
-    command = input('Give a Command: [w] Up | [s] Down | [a] Left | [d] Right | [q] Quit: ', 's');
+    command = input('[w] Up | [s] Down | [a] Left | [d] Right | [i] Inventory | [q] Quit >> ', 's');
     
-    % Executa a ação baseada no input
     switch lower(command)
-        case 'w'
-            hero = hero.move(0, 1);
-        case 's'
-            hero = hero.move(0, -1);
-        case 'a'
-            hero = hero.move(-1, 0);
-        case 'd'
-            hero = hero.move(1, 0);
-case 'i'
-hero.printInventory();
+        case 'w', hero = hero.move(0, 1);
+        case 's', hero = hero.move(0, -1);
+        case 'a', hero = hero.move(-1, 0);
+        case 'd', hero = hero.move(1, 0);
+        case 'i', hero.printInventory(); pause(3); 
         case 'q'
             isRunning = false;
-            disp('Closing the game...');
-            close all;
+            fprintf(2,'Closing the game...');
         otherwise
-            disp('Invalid command!');
-            pause(1.2);
+            fprintf(2,'Invalid command!');
+            pause(1.2); 
     end
-
 end

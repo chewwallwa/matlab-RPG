@@ -4,13 +4,19 @@ classdef world
         figHandle
         axHandle
         backgroundImage
-        playerHandle % NOVO: Guarda o "ID" apenas do plot do jogador
+        playerHandle % "ID" apenas do plot do jogador
+        enemyList % array de monstros instanciados
     end
     methods
         function obj = world()
             obj.matrixGrid = ones(10, 10); % mapa base
-            obj.matrixGrid(7,7) = 2; % cidade principal
-            obj.matrixGrid(9,2) = 3; % boss
+            obj.matrixGrid(7,7) = 2; % cidade principal            
+            
+            obj.enemyList = {
+                monster('Slime', 3, 3);
+                monster('Goblin', 8, 2);
+                monster('Lula', 9, 9)
+            };
             
             obj.figHandle = figure(1); 
             set(obj.figHandle, 'Name', 'World Map', 'NumberTitle', 'off');
@@ -28,9 +34,13 @@ classdef world
                 
                 % Plota lugares no mapa
                 [townY, townX] = find(obj.matrixGrid == 2);
-                [bossY, bossX] = find(obj.matrixGrid == 3);                
                 plot(obj.axHandle, townX, townY, 'sk', 'MarkerFaceColor', 'c', 'MarkerSize', 12);
-                plot(obj.axHandle, bossX, bossY, 'xk', 'LineWidth', 2, 'MarkerSize', 12, 'Color', 'y');
+
+                % Plot os monstros
+                for i = 1:length(obj.enemyList)
+                    enemy = obj.enemyList{i};
+                    plot(obj.axHandle, enemy.x, enemy.y, 'xk', 'LineWidth', 2, 'MarkerSize', 12, 'Color', 'r');
+                end
                 
                 % Plota o Player
                 obj.playerHandle = plot(obj.axHandle, heroX, heroY, 'ko', 'MarkerFaceColor', 'w', 'MarkerSize', 8);
@@ -56,13 +66,21 @@ classdef world
         function printContext(obj, heroX, heroY)
             terrainVal = obj.matrixGrid(heroY, heroX);
             
-            if terrainVal == 3
-                fprintf('\nALERT: You stepped into a monster lair!\n');
-            elseif terrainVal == 2
-                fprintf('\nWelcome to the Central Town. It is safe here.\n');
-            else
-                fprintf('\nYou are exploring the wild. Pos: (%d, %d)\n', heroX, heroY);
+            if terrainVal == 2
+                fprintf(2,'\nWelcome to the Central Town. It is safe here.\n');
+                return; % Sai da função pra não imprimir mato
             end
+
+            for i = 1:length(obj.enemyList)
+                enemy = obj.enemyList{i};
+                if heroX == enemy.x && heroY == enemy.y                
+                    fprintf(2,'\nALERT: You bumped into a %s (HP: %d)!\n', enemy.name, enemy.HP);
+                    fprintf('\nPos: (%d, %d)\n', heroX, heroY);
+                    return; 
+                end
+            end
+            
+            fprintf('\nYou are exploring the wild. Pos: (%d, %d)\n', heroX, heroY);
         end
 
     end

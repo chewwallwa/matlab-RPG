@@ -1,17 +1,23 @@
 classdef monster < entity
-    properties
-        Money_rwd
-        XP_rwd
-
-        HP % heath points
-        AD % atack damage
-        AP % ability power
-        PR % physical resistance
-        MR % magical resistance
-    end
     methods
-        function obj = monster(name, startX, startY)
-            obj = obj@entity(name, startX, startY);
+        function obj = monster(type, startX, startY)
+            obj = obj@entity(type, startX, startY);
+            
+            switch lower(type)
+                case 'slime'
+                    obj.stats.maxHP = 30;
+                    obj.stats.AD = 5;
+                    obj.stats.PR = 0;
+                case 'goblin'
+                    obj.stats.maxHP = 50;
+                    obj.stats.AD = 12;
+                    obj.stats.PR = 2;
+                case 'lula'
+                    obj.stats.maxHP = 200;
+                    obj.stats.AD = 25;
+                    obj.stats.PR = 15;
+            end
+            obj.HP = obj.stats.maxHP;
         end
     end
 end
